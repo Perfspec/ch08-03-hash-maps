@@ -3,14 +3,14 @@ use std::collections::HashMap;
 fn main() {
 	
 	let intial_teams = vec![String::from("Green"), String::from("Red")];
-    let initial_scores = vec![11, 22];
+	let initial_scores = vec![11, 22];
 	
-    let mut game = MultiTeamGame {
+	let mut game = MultiTeamGame {
         scores: intial_teams.into_iter().zip(initial_scores.into_iter()).collect()
 	};
 	
 	game.create_score(String::from("Blue"), 33);
-    game.create_score(String::from("Yellow"), 44);
+	game.create_score(String::from("Yellow"), 44);
 	
 	game.get_all_scores();
 	
@@ -29,7 +29,9 @@ impl MultiTeamGame {
 		self.scores.insert(team_name,team_score);
 	}
 	fn get_all_scores(&self) {
-		println!("scores: {:#?}", self.scores);
+		for (key, value) in &self.scores {
+			println!("{}: {}", key, value);
+		}
 	}
 	fn get_score(&self, team_name: &String) {
 		match self.scores.get(team_name) {
