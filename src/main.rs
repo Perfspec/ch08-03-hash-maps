@@ -51,7 +51,16 @@ fn main() {
 	
 	println!("mean: {}", mean(&list_of_integers));
 	println!("median: {}", median(&list_of_integers));
-	println!("mode: {}", mode(&list_of_integers));	
+	println!("mode: {}", mode(&list_of_integers));
+	
+	//___________________________________________________________________________
+	// Convert strings to pig latin. The first consonant of each word is moved to
+	// the end of the word and “ay” is added, so “first” becomes “irst-fay.” Words
+	// that start with a vowel have “hay” added to the end instead (“apple” becomes
+	// “apple-hay”). Keep in mind the details about UTF-8 encoding!
+	
+	let initial_string = "Then fall in lads behind the drum with colours blazing like the sun along the road to come what may over the hills and far away".to_string();
+	println!("{}", to_pig_latin(&initial_string));
 }
 
 fn mean(vector: &Vec<usize>) -> f32 {
@@ -98,6 +107,43 @@ fn mode(vector: &Vec<usize>) -> usize {
 		};
 	}
 	mode_key
+}
+
+fn to_pig_latin(string: &String) -> String {
+	let mut separated_by_whitespace = string.split_ascii_whitespace();
+	let vowels = vec!["a".to_string(),"e".to_string(),"i".to_string(),"o".to_string(),"u".to_string()];
+	let mut result_string = String::new();
+	loop {
+		match separated_by_whitespace.next() {
+			Some(word) => {
+				let mut chars_of_word = word.chars();
+				match chars_of_word.next() {
+					Some(first_char_of_word) => {
+						let mut pig = String::new();
+						let first_char_as_string = first_char_of_word.to_string();
+						if !vowels.contains(&first_char_as_string) {
+							pig.push(first_char_of_word);
+							pig.push_str("ay");
+						} else {
+							pig.push_str("hay");
+						}
+						loop {
+							match chars_of_word.next() {
+								Some(char_of_word) => result_string.push(char_of_word),
+								None => break,
+							}
+						};
+						result_string.push_str("-");
+						result_string.push_str(&pig);
+						result_string.push_str(" ");
+					},
+					None => println!("warning: '{}' has no chars.", word),
+				}
+			},
+			None => break,
+		};
+	};
+	result_string
 }
 
 struct MultiTeamGame {
